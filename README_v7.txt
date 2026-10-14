@@ -120,3 +120,8 @@ Improvements
   - vulkaninfo result cached (re-probed by STT Diagnostics).
   - numpy RMS / mouth envelope (much faster on long replies).
   - speech.avatar_sync_offset_ms aligns mouth movement with audio start.
+  - Piper voice is pre-loaded at startup (~4 s), so the first reply is
+    not delayed.
+  - A silent PipeWire stream keeps the HDMI output awake so the first
+    word is no longer clipped (speech.keep_audio_output_awake), with a
+    lead-in fallback (speech.playback_lead_in_ms).

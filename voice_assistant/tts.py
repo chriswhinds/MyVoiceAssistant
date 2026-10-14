@@ -31,6 +31,8 @@ from tkinter import messagebox
 
 import speech_recognition as sr
 
+from .whisper_server import die_with_parent
+
 try:
     import numpy as np
 except Exception:  # numpy ships with faster-whisper; pure-Python fallback otherwise
@@ -61,6 +63,62 @@ class TextToSpeechMixin:
                 proc.terminate()
             except Exception:
                 pass
+
+    def _start_audio_keepalive(self):
+        """
+        Keep the default output awake with an inaudible PipeWire stream.
+
+        PipeWire suspends an idle sink after ~5 s. When it resumes, HDMI
+        receivers need a moment to re-lock and the start of speech is lost.
+        """
+        if not bool(self.app_config.get("speech", {}).get("keep_audio_output_awake", True)):
+            return
+        if self._audio_keepalive_running():
+            return
+        pw_play = shutil.which("pw-play")
+        if not pw_play:
+            return  # not PipeWire; _speak_text falls back to a lead-in
+        try:
+            self._audio_keepalive_proc = subprocess.Popen(
+                [
+                    pw_play, "--raw", "--format", "s16", "--rate", "8000",
+                    "--channels", "1", "--volume", "0",
+                    "-P", "{ node.name = MyVoiceAssistant-keepalive }",
+                    "/dev/zero",
+                ],
+                stdin=subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                preexec_fn=die_with_parent,
+            )
+        except OSError as exc:
+            self._audio_keepalive_proc = None
+            self._trace_exception("AUDIO_KEEPALIVE", exc)
+
+    def _audio_keepalive_running(self):
+        proc = self._audio_keepalive_proc
+        return proc is not None and proc.poll() is None
+
+    def _stop_audio_keepalive(self):
+        proc, self._audio_keepalive_proc = self._audio_keepalive_proc, None
+        if proc is not None and proc.poll() is None:
+            proc.terminate()
+            try:
+                proc.wait(timeout=2)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+
+    @staticmethod
+    def _prepend_silence(wav_path, milliseconds):
+        """Insert leading silence into a 16-bit PCM WAV file in place."""
+        with wave.open(wav_path, "rb") as src:
+            params = src.getparams()
+            frames = src.readframes(src.getnframes())
+        silent_frames = int(params.framerate * milliseconds / 1000.0)
+        padding = b"\x00" * (silent_frames * params.sampwidth * params.nchannels)
+        with wave.open(wav_path, "wb") as dst:
+            dst.setparams(params)
+            dst.writeframes(padding + frames)
 
     def stop_speaking(self):
         self._cancel_response_and_speech()
@@ -402,6 +460,20 @@ class TextToSpeechMixin:
                         + (synth.stderr.strip() or "unknown synthesis error")
                     )
 
+            # Restart the keep-alive if it died (e.g. PipeWire restarted). If
+            # it cannot run and the output has been idle long enough to
+            # suspend, pad the start so the first word is not swallowed.
+            self._start_audio_keepalive()
+            speech_cfg = self.app_config.get("speech", {})
+            try:
+                lead_in_ms = max(0.0, float(speech_cfg.get("playback_lead_in_ms", 300)))
+            except (TypeError, ValueError):
+                lead_in_ms = 300.0
+            idle_for = time.monotonic() - self._last_playback_end
+            if lead_in_ms and not self._audio_keepalive_running() and idle_for > 4.0:
+                self._prepend_silence(wav_path, lead_in_ms)
+
+            # Computed after any padding so the mouth stays in sync.
             envelope = self._make_wav_envelope(
                 wav_path,
                 frame_ms=self.avatar_envelope_frame_ms
@@ -447,6 +519,7 @@ class TextToSpeechMixin:
             finally:
                 with self._playback_lock:
                     self._playback_proc = None
+                self._last_playback_end = time.monotonic()
 
             # Negative return codes mean we terminated it deliberately.
             if playback.returncode > 0:

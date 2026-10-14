@@ -57,7 +57,7 @@ except Exception:
     _prctl = None
 
 
-def _die_with_parent():
+def die_with_parent():
     """Linux: kill the server if the app crashes or is killed."""
     if _prctl is not None:
         _prctl(_PR_SET_PDEATHSIG, _SIGKILL)
@@ -121,7 +121,7 @@ class WhisperServer:
             stdout=self._log_handle,
             stderr=subprocess.STDOUT,
             stdin=subprocess.DEVNULL,
-            preexec_fn=_die_with_parent,
+            preexec_fn=die_with_parent,
         )
         self._key = key
         self._base_url = f"http://127.0.0.1:{port}"

@@ -175,12 +175,22 @@ class OllamaVoiceAssistant(
         self.piper_available = False
         self._piper_lock = threading.Lock()
 
+        # Silent stream that keeps the (HDMI) output awake, plus the time the
+        # last playback ended, used to decide when a lead-in is needed.
+        self._audio_keepalive_proc = None
+        self._last_playback_end = 0.0
+
         self._detect_linux_audio_stack()
         self._detect_piper_voice()
         self._detect_local_stt_stack()
 
         self.tts_thread = threading.Thread(target=self._tts_worker, daemon=True)
         self.tts_thread.start()
+
+        # Loading the Piper voice takes ~4 s on the Mac Pro; do it now rather
+        # than delaying the first spoken reply.
+        threading.Thread(target=self._load_piper_voice, daemon=True).start()
+        self._start_audio_keepalive()
 
         self._build_ui()
         self._refresh_runtime_settings()

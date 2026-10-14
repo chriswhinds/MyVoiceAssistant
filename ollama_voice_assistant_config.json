@@ -21,7 +21,9 @@
     "endpoint_voice_margin": 14.0,
     "endpoint_confirm_windows": 2,
     "stream_tts": true,
-    "avatar_sync_offset_ms": 80
+    "avatar_sync_offset_ms": 80,
+    "keep_audio_output_awake": true,
+    "playback_lead_in_ms": 300
   },
   "trigger_words": {
     "enabled": true,

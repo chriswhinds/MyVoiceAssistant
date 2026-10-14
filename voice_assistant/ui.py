@@ -313,4 +313,5 @@ class UIMixin:
             pass
         # Release the GPU-resident whisper-server process.
         self._whisper_server.stop()
+        self._stop_audio_keepalive()
         self.root.destroy()

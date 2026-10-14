@@ -154,6 +154,8 @@ All settings live in `ollama_voice_assistant_config.json` beside the script. Any
 | `speech.low_latency_mode` | `true` | Prefer backends that keep the speech model loaded |
 | `speech.stream_tts` | `true` | Speak sentence by sentence while the reply streams |
 | `speech.avatar_sync_offset_ms` | `80` | Delay the avatar's mouth to line up with audio playback |
+| `speech.keep_audio_output_awake` | `true` | Play inaudible silence so the speaker output (especially HDMI) never sleeps and clips the first word |
+| `speech.playback_lead_in_ms` | `300` | Fallback when the silent stream can't run: silence added before speech that starts after the output was idle |
 | `trigger_words.enabled` | `true` | Use wake words |
 | `trigger_words.auto_arm_on_launch` | `true` | Start listening for the wake word when the app opens |
 | `trigger_words.start` / `stop` | *see file* | Phrases that start and stop active listening |
@@ -187,6 +189,7 @@ Measured on the Mac Pro 6,1 with `base.en` and an 11-second clip: `whisper-serve
 | "Ubuntu prerequisites need attention" on launch | Re-run `./install_ubuntu_26_04_v7.sh`; the dialog lists what is missing |
 | Wake word never triggers | Use **Test Mic**: a low signal means you should raise the input gain in Ubuntu's sound settings or pick another device. Turn on `diagnostics.trace_enabled` to watch the live levels |
 | Speech is robotic | Piper failed to load and espeak-ng is being used; check the status bar message and that the voice files exist under `~/.local/share/ollama-voice-assistant/piper/` |
+| First word of a reply is cut off | Keep `speech.keep_audio_output_awake` on (needs PipeWire's `pw-play`), or raise `speech.playback_lead_in_ms` |
 | Transcription is slow | Open **STT Diagnostics** to confirm the GPU and `whisper-server` are detected; build them with `./build_whisper_vulkan.sh` |
 | "Cannot connect to Ollama" | Check the host and port in the config, and that Ollama listens on the network (`OLLAMA_HOST=0.0.0.0` on the server) |
 | GPU / Vulkan problems | Run `./diagnose_macpro61_vulkan.sh` for a full report |

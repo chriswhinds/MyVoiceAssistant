@@ -61,6 +61,12 @@ class ConfigMixin:
                 "stream_tts": True,
                 # Delay mouth animation to match audio player start-up latency.
                 "avatar_sync_offset_ms": 80,
+                # Play inaudible silence so the output (notably HDMI) never
+                # suspends; otherwise the first word is lost while it wakes.
+                "keep_audio_output_awake": True,
+                # Fallback when the keep-alive stream is unavailable: silence
+                # prepended to speech that starts after the output went idle.
+                "playback_lead_in_ms": 300,
             },
             "diagnostics": {
                 "trace_enabled": False
