@@ -43,6 +43,6 @@
     "active_confirm_windows": 1
   },
   "diagnostics": {
-    "trace_enabled": true
+    "trace_enabled": false
   }
 }

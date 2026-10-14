@@ -47,7 +47,7 @@ class ConfigMixin:
                 "avatar_sync_offset_ms": 80,
             },
             "diagnostics": {
-                "trace_enabled": True
+                "trace_enabled": False
             },
             "trigger_words": {
                 "enabled": True,
