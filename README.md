@@ -1,3 +1,21 @@
+<!--
+  Copyright 2026 Christopher Hinds, Stratum LLC
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+  SPDX-License-Identifier: Apache-2.0
+-->
+
 # MyVoiceAssistant
 
 A hands-free voice assistant that runs entirely on your own hardware. You speak to it through a microphone; it transcribes your speech locally, sends the text to an [Ollama](https://ollama.com) language model on your network, and speaks the answer back in a natural female voice while an animated avatar's mouth moves in time with the audio.
@@ -192,8 +210,15 @@ ollama_voice_assistant_config.json
 install_ubuntu_26_04_v7.sh       system + Python setup
 build_whisper_vulkan.sh          whisper.cpp Vulkan build
 diagnose_macpro61_vulkan.sh      GPU / audio diagnostics
+LICENSE                          Apache License 2.0
 README_v7.txt                    version history
 OllamaVoiceAssistant_v7_*.py     earlier single-file versions, kept for reference
 ```
 
 See `README_v7.txt` for the detailed change history.
+
+## License
+
+Copyright 2026 Christopher Hinds, Stratum LLC.
+
+Licensed under the [Apache License, Version 2.0](LICENSE). You may not use this project except in compliance with the License.
