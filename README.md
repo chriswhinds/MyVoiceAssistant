@@ -211,6 +211,7 @@ install_ubuntu_26_04_v7.sh       system + Python setup
 build_whisper_vulkan.sh          whisper.cpp Vulkan build
 diagnose_macpro61_vulkan.sh      GPU / audio diagnostics
 LICENSE                          Apache License 2.0
+NOTICE                           attribution notice (Apache 2.0, Section 4(d))
 README_v7.txt                    version history
 OllamaVoiceAssistant_v7_*.py     earlier single-file versions, kept for reference
 ```
@@ -222,3 +223,5 @@ See `README_v7.txt` for the detailed change history.
 Copyright 2026 Christopher Hinds, Stratum LLC.
 
 Licensed under the [Apache License, Version 2.0](LICENSE). You may not use this project except in compliance with the License.
+
+Attribution notices are listed in [NOTICE](NOTICE); keep them with any redistribution, as Section 4(d) of the License requires.
