@@ -1,0 +1,7 @@
+SpeechRecognition>=3.10
+PyAudio>=0.2.14
+requests>=2.31
+faster-whisper>=1.1.0
+piper-tts>=1.8.0
+numpy>=1.24
+audioop-lts>=0.2.1; python_version >= "3.13"

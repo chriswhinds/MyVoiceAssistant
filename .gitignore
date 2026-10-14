@@ -1,0 +1,16 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+
+# Local builds / downloaded models (installed under ~/.local/share/ollama-voice-assistant)
+third_party/
+*.onnx
+*.onnx.json
+*.bin
+
+# Editor / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store

@@ -1,0 +1,48 @@
+{
+  "ollama": {
+    "host": "192.168.1.165",
+    "port": 11434,
+    "model": "llama3.2",
+    "max_history_turns": 12,
+    "keep_alive": "30m"
+  },
+  "system_prompt": "You are a helpful local research assistant and your name is Alice. Answer conversationally and keep spoken responses reasonably concise. Your replies are read aloud, so do not use markdown, bullet points, tables or code blocks.",
+  "standby": {
+    "enabled": true,
+    "interval_seconds": 10,
+    "phrase": "I'm researching your request, please stand by."
+  },
+  "speech": {
+    "endpoint_silence_seconds": 5.0,
+    "max_utterance_seconds": 120,
+    "low_latency_mode": true,
+    "endpoint_smoothing_alpha": 0.35,
+    "endpoint_voice_multiplier": 1.3,
+    "endpoint_voice_margin": 14.0,
+    "endpoint_confirm_windows": 2,
+    "stream_tts": true,
+    "avatar_sync_offset_ms": 80
+  },
+  "trigger_words": {
+    "enabled": true,
+    "auto_arm_on_launch": true,
+    "start": [
+      "hey Alice ",
+      "start listening"
+    ],
+    "stop": [
+      "stop listening",
+      "Alice go to sleep"
+    ],
+    "start_acknowledgement": "I'm Listening.",
+    "stop_acknowledgement": "I'm Standing by.",
+    "strip_trigger_from_request": true,
+    "active_trigger_scale": 0.72,
+    "post_tts_guard_seconds": 0.25,
+    "active_voice_floor": 45.0,
+    "active_confirm_windows": 1
+  },
+  "diagnostics": {
+    "trace_enabled": true
+  }
+}
