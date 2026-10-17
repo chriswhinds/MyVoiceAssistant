@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright 2026 Christopher Hinds, Stratum LLC
+# Copyright 2026 Christopher Hinds, Stratum Technologies LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

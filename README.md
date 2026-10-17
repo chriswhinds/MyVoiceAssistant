@@ -1,5 +1,5 @@
 <!--
-  Copyright 2026 Christopher Hinds, Stratum LLC
+  Copyright 2026 Christopher Hinds, Stratum Technologies LLC
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -223,7 +223,7 @@ See `README_v7.txt` for the detailed change history.
 
 ## License
 
-Copyright 2026 Christopher Hinds, Stratum LLC.
+Copyright 2026 Christopher Hinds, Stratum Technologies LLC.
 
 Licensed under the [Apache License, Version 2.0](LICENSE). You may not use this project except in compliance with the License.
 
